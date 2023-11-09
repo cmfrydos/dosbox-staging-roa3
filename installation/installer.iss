@@ -1,12 +1,12 @@
 #define MyAppName "Riva Dosbox Logger"
-#define MyAppVersion "0.1.8"
+#define MyAppVersion "0.1.9"
 
 #define MyAppRegPath "Software\tinion\riva-dosbox-logger"
 
 [Setup]
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
-VersionInfoVersion=0.1.8.1
+VersionInfoVersion=0.1.9.0
 DefaultDirName={pf}\{#MyAppName}
 OutputDir=out
 SetupIconFile="files\install\common\logeyes.ico"

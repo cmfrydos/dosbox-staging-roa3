@@ -9,8 +9,25 @@ ArchitecturesAllowed=x64
 [Files]
 ; Including files from different directories
 Source: "files\install\common\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
-Source: "files\install\x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 Source: "..\vs\x64\Release\dosbox.exe"; DestName: "dosbox-roa3.exe"; DestDir: "{app}\dosbox-roa3"; Flags: ignoreversion
+
+Source: "..\vcpkg_installed\x64-windows\x64-windows\bin\libpng16.dll";  DestDir: "{app}\dosbox-roa3"; Flags: ignoreversion
+Source: "..\vcpkg_installed\x64-windows\x64-windows\bin\SDL2_net.dll";  DestDir: "{app}\dosbox-roa3"; Flags: ignoreversion
+Source: "..\vcpkg_installed\x64-windows\x64-windows\bin\SDL2_image.dll";  DestDir: "{app}\dosbox-roa3"; Flags: ignoreversion
+Source: "..\vcpkg_installed\x64-windows\x64-windows\bin\SDL2.dll";  DestDir: "{app}\dosbox-roa3"; Flags: ignoreversion
+Source: "..\vcpkg_installed\x64-windows\x64-windows\bin\mt32emu-2.dll";  DestDir: "{app}\dosbox-roa3"; Flags: ignoreversion
+Source: "..\vcpkg_installed\x64-windows\x64-windows\bin\ogg.dll";  DestDir: "{app}\dosbox-roa3"; Flags: ignoreversion
+Source: "..\vcpkg_installed\x64-windows\x64-windows\bin\opus.dll";  DestDir: "{app}\dosbox-roa3"; Flags: ignoreversion
+
+Source: "..\vcpkg_installed\x64-windows\x64-windows\bin\libfluidsynth-3.dll";  DestDir: "{app}\dosbox-roa3"; Flags: ignoreversion
+Source: "..\vcpkg_installed\x64-windows\x64-windows\bin\iir.dll";  DestDir: "{app}\dosbox-roa3"; Flags: ignoreversion
+
+Source: "..\vcpkg_installed\x64-windows\x64-windows\bin\libspeexdsp.dll";  DestDir: "{app}\dosbox-roa3"; Flags: ignoreversion
+Source: "..\vcpkg_installed\x64-windows\x64-windows\bin\glib-2.0-0.dll";  DestDir: "{app}\dosbox-roa3"; Flags: ignoreversion
+
+Source: "..\vcpkg_installed\x64-windows\x64-windows\bin\iconv-2.dll";  DestDir: "{app}\dosbox-roa3"; Flags: ignoreversion
+Source: "..\vcpkg_installed\x64-windows\x64-windows\bin\intl-8.dll";  DestDir: "{app}\dosbox-roa3"; Flags: ignoreversion
+Source: "..\vcpkg_installed\x64-windows\x64-windows\bin\pcre2-8.dll";  DestDir: "{app}\dosbox-roa3"; Flags: ignoreversion
 
 ; Updated paths for 7z, sha1, and patch directories
 Source: "files\tmp\x64\7z\*"; DestDir: "{tmp}\7z"; Flags: ignoreversion recursesubdirs deleteafterinstall
