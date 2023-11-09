@@ -20,7 +20,7 @@
  */
 
 // #define DEBUG 1
-
+//#define NO_MUSIC // ToDo: Per setting
 #include "cdrom.h"
 
 #include <cassert>
@@ -705,6 +705,10 @@ bool CDROM_Interface_Image::PlayAudioSector(uint32_t start, uint32_t len)
 	if (track != tracks.end())
 		track_file = track->file;
 
+    #ifdef NO_MUSIC
+    return false; // to prevent dosbox from playing music
+    #endif // NO_MUSIC
+
 	// Guard: sanity check the request beyond what GetTrack already checks
 	if (len == 0 || track == tracks.end() || !track_file ||
 	    track->attr == 0x40 || !player.channel) {
@@ -801,8 +805,12 @@ bool CDROM_Interface_Image::PlayAudioSector(uint32_t start, uint32_t len)
 	return true;
 }
 
+// Tracking last played audio and whether it's paused (by using signed numbers)
+int last_audio_track = 0;
+
 bool CDROM_Interface_Image::PauseAudio(bool resume)
 {
+	last_audio_track  = -last_audio_track;
 	player.isPaused = !resume;
 	if (player.channel)
 		player.channel->Enable(resume);
@@ -815,6 +823,7 @@ bool CDROM_Interface_Image::PauseAudio(bool resume)
 
 bool CDROM_Interface_Image::StopAudio(void)
 {
+	last_audio_track   = 0;
 	player.isPlaying = false;
 	player.isPaused = false;
 	if (player.channel)
@@ -916,11 +925,17 @@ track_iter CDROM_Interface_Image::GetTrack(const uint32_t sector)
 	 */
 	track_iter track = tracks.begin();
 	uint32_t lower_bound = track->start;
+	bool any_tracks = false;
 	while (track != tracks.end()) {
 		const uint32_t upper_bound = track->start + track->length;
 		if (lower_bound <= sector && sector < upper_bound) {
 			break;
 		}
+		if (!any_tracks) {
+			any_tracks     = true;
+			last_audio_track = 1;
+		} 
+		last_audio_track++;
 		++track;
 		lower_bound = upper_bound;
 	}

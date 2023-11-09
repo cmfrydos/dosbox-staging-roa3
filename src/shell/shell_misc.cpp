@@ -471,6 +471,8 @@ void DOS_Shell::ProcessCmdLineEnvVarStitution(char* line) {
 }
 
 std::string full_arguments = "";
+bool jemmex_active;
+
 bool DOS_Shell::Execute(char * name,char * args) {
 /* return true  => don't check for hardware changes in do_command 
  * return false =>       check for hardware changes in do_command */
@@ -549,6 +551,17 @@ bool DOS_Shell::Execute(char * name,char * args) {
 		if(strcasecmp(extension, ".com") !=0) 
 		{
 			if(strcasecmp(extension, ".exe") !=0) return false;
+		}
+		loguru::log(0, __FILE__, __LINE__, ("Opening " + std::string(fullname)).c_str());
+
+		auto str = std::string(fullname);
+		std::transform(str.begin(),
+		               str.end(),
+		               str.begin(),
+		               [](unsigned char c) { return std::tolower(c); });
+
+		if (str == "jemmex.exe") {
+			jemmex_active = true;
 		}
 		/* Run the .exe or .com file from the shell */
 		/* Allocate some stack space for tables in physical memory */

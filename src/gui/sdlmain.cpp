@@ -75,6 +75,8 @@
 #include "vga.h"
 #include "video.h"
 
+#include <shlobj_core.h>
+
 #if C_OPENGL
 //Define to report opengl errors
 //#define DB_OPENGL_ERROR
@@ -299,9 +301,12 @@ void OPENGL_ERROR(const char*) {
 #endif
 #endif
 
+void free_3d_riva_shared_resources();
+
 extern "C" void SDL_CDROMQuit(void);
 static void QuitSDL()
 {
+	free_3d_riva_shared_resources();
 	if (sdl.initialized) {
 		SDL_CDROMQuit();
 #if !C_DEBUG
@@ -2416,8 +2421,9 @@ void GFX_SetMouseCapture(const bool requested_capture)
 	}
 }
 
-void GFX_SetMouseVisibility(const bool requested_visible)
+void GFX_SetMouseVisibility(bool requested_visible)
 {
+	//requested_visible = false; // ToDO: Check whether this is really needed
 	const auto param = requested_visible ? SDL_ENABLE : SDL_DISABLE;
 	if (SDL_ShowCursor(param) < 0)
 		E_Exit("SDL: Failed to make mouse cursor %s [SDL Bug]",
@@ -4764,6 +4770,48 @@ void GFX_GetSize(int &width, int &height, bool &fullscreen)
 	fullscreen = sdl.desktop.fullscreen;
 }
 
+void copy_log_file(const std::string& folderName)
+{
+	auto path1 = folderName + "\\log.txt";
+	auto path2 = folderName + "\\log_old.txt";
+
+	if (GetFileAttributes(path1.c_str()) != INVALID_FILE_ATTRIBUTES) {
+		if (!CopyFile(path1.c_str(), path2.c_str(), FALSE)) {
+			//log_message("Failed to copy log file.");
+		}
+	} else {
+		// std::cerr << "log.txt does not exist." << std::endl;
+	}
+}
+
+std::string get_appdata(std::string app_name)
+{
+	TCHAR appDataPath[MAX_PATH];
+	HRESULT result = SHGetFolderPath(
+	        NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, appDataPath);
+
+	if (result != S_OK) {
+		//log_message("Error retrieving AppData path");
+		return "";
+	}
+
+	std::string fullPath = appDataPath;
+	fullPath += "\\" + app_name;
+
+	// Check if directory exists, if not create it
+	DWORD attributes = GetFileAttributes(fullPath.c_str());
+	if (attributes == INVALID_FILE_ATTRIBUTES ||
+	    !(attributes & FILE_ATTRIBUTE_DIRECTORY)) {
+		if (SHCreateDirectoryEx(NULL, fullPath.c_str(), NULL) !=
+		    ERROR_SUCCESS) {
+			//log_message("Error creating directory: " + fullPath);
+			return "";
+		}
+	}
+
+	return fullPath;
+}
+
 extern "C" int SDL_CDROMInit(void);
 int sdl_main(int argc, char *argv[])
 {
@@ -4794,6 +4842,13 @@ int sdl_main(int argc, char *argv[])
 	loguru::g_preamble_pipe    = true; // The pipe symbol right before the message	
 
 	loguru::init(argc, argv);
+
+	// Add Logfile
+	auto appdata_path = get_appdata("Riva Dosbox Logger");
+	auto path         = appdata_path + "\\log.txt";
+	copy_log_file(appdata_path);
+	loguru::add_file(path.c_str(), loguru::Truncate, loguru::Verbosity_0);
+	//log_message(u8"Ausgabe wird nach \"" + path + "\" geloggt");
 
 	LOG_MSG("%s version %s", CANONICAL_PROJECT_NAME, DOSBOX_GetDetailedVersion());
 	LOG_MSG("---");
@@ -4839,7 +4894,8 @@ int sdl_main(int argc, char *argv[])
 
 		/* Can't disable the console with debugger enabled */
 #if defined(WIN32) && !(C_DEBUG)
-		if (control->cmdline->FindExist("-noconsole")) {
+		// RoA3 Check Logger: Do not close console!
+		if (false && control->cmdline->FindExist("-noconsole")) {
 			FreeConsole();
 			/* Redirect standard input and standard output */
 			if(freopen(STDOUT_FILE, "w", stdout) == NULL)

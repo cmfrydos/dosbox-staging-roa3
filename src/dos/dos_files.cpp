@@ -601,12 +601,24 @@ bool DOS_CreateFile(const char* name, uint16_t attributes, uint16_t* entry, bool
 	}
 }
 
+// Tracking the last opened level by checking the most recently accessed .3DM file
+std::string last_opened_3dm = "";
+
 bool DOS_OpenFile(const char* name, uint8_t flags, uint16_t* entry, bool fcb)
 {
 	/* First check for devices */
 	if (flags>2) LOG(LOG_FILES,LOG_ERROR)("Special file open command %X file %s",flags,name);
 	else LOG(LOG_FILES,LOG_NORMAL)("file open command %X file %s",flags,name);
+	
+	if (ends_with(name, ".3DM")) {
+		last_opened_3dm = name;
+	}
 
+	if (ends_with(name, ".ALF"))
+	{
+		auto help = true;
+	}
+	
 	uint16_t attr = 0;
 	uint8_t devnum = DOS_FindDevice(name);
 	bool device = (devnum != DOS_DEVICES);

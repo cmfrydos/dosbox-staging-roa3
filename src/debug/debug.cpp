@@ -1648,8 +1648,9 @@ uint32_t DEBUG_CheckKeys(void) {
 			if (ungetch('S') != ERR) key=27;
 			break;
 		}
+		auto upper = toupper(key);
 #endif
-		switch (toupper(key)) {
+		switch (key) {
 		case 27:	// escape (a bit slow): Clears line. and processes alt commands.
 			key=getch();
 			if(key < 0) { //Purely escape Clear line

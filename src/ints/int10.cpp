@@ -31,6 +31,8 @@ Int10Data int10;
 static callback_number_t call_10 = 0;
 static bool warned_ff=false;
 
+void checked_write_shared_screen_buffer();
+
 static Bitu INT10_Handler(void) {
 #if 0
 	switch (reg_ah) {
@@ -50,6 +52,7 @@ static Bitu INT10_Handler(void) {
 	}
 #endif
 	INT10_SetCurMode();
+	checked_write_shared_screen_buffer(); // Update mouse state in shared data
 
 	switch (reg_ah) {
 	case 0x00:								/* Set VideoMode */

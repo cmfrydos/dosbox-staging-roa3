@@ -425,6 +425,8 @@ zlib_dep = dependency(
     static: ('zlib' in static_libs_list or prefers_static_libs),
 )
 
+boost_dep = dependency('boost', modules : ['regex'])
+
 # SpeexDSP
 # ~~~~~~~~
 # Default to the system library
@@ -844,6 +846,7 @@ third_party_deps = [
     tracy_dep,
     libwhereami_dep,
     libtalchorus_dep,
+	boost_dep
 ]
 
 if conf_data.get('C_MANYMOUSE') != 0

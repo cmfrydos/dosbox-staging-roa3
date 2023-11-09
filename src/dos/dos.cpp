@@ -830,7 +830,7 @@ static Bitu DOS_21Handler(void) {
 	case 0x3f:		/* READ Read from file or device */
 		{ 
 			uint16_t toread=DOS_GetAmount();
-			dos.echo=true;
+ 			dos.echo=true;
 			if (DOS_ReadFile(reg_bx,dos_copybuf,&toread)) {
 				MEM_BlockWrite(SegPhys(ds)+reg_dx,dos_copybuf,toread);
 				reg_ax=toread;

@@ -240,6 +240,51 @@ static void SetupCMDLine(uint16_t pspseg,DOS_ParamBlock & block) {
 	psp.SetCommandTail(block.exec.cmdtail);
 }
 
+bool readLargeFileToVector(uint16_t fhandle, std::vector<uint8_t>& byteVector,
+                           uint32_t desiredLength)
+{
+	// The maximum chunk size DOS_ReadFile can handle
+	const uint16_t maxChunkSize = 65535;
+
+	// Total bytes read so far
+	uint32_t totalBytesRead = 0;
+
+	// Resize the vector to accommodate the desired length
+	byteVector.resize(desiredLength);
+
+	// Loop until the desired length is reached
+	while (totalBytesRead < desiredLength) {
+		// Calculate the size of the next chunk to read
+		uint16_t chunkSize = static_cast<uint16_t>(
+		        std::min(static_cast<uint32_t>(maxChunkSize),
+		                 desiredLength - totalBytesRead));
+
+		// Temporary buffer to store the chunk read from the file
+		uint8_t tempBuffer[maxChunkSize];
+
+		uint16_t l = maxChunkSize;
+		// Attempt to read a chunk from the file
+		if (!DOS_ReadFile(fhandle, tempBuffer, &l)) {
+			// Handle read error...
+			return false;
+		}
+
+		// Copy the data from the temporary buffer to the vector
+		std::memcpy(byteVector.data() + totalBytesRead, tempBuffer, l);
+
+		// Update the total number of bytes read
+		totalBytesRead += l;
+
+		if (l < maxChunkSize)
+			break;
+	}
+	byteVector.resize(totalBytesRead);
+
+	return true; // Indicate success
+}
+
+extern std::vector<uint8_t> riva_vector;
+
 bool DOS_Execute(char * name,PhysPt block_pt,uint8_t flags) {
 	EXE_Header head;Bitu i;
 	uint16_t fhandle;uint16_t len;uint32_t pos;
@@ -264,10 +309,16 @@ bool DOS_Execute(char * name,PhysPt block_pt,uint8_t flags) {
 		return false;
 	}
 	len=sizeof(EXE_Header);
+
+	
+
 	if (!DOS_ReadFile(fhandle,(uint8_t *)&head,&len)) {
 		DOS_CloseFile(fhandle);
 		return false;
 	}
+
+	
+
 	if (len<sizeof(EXE_Header)) {
 		if (len==0) {
 			/* Prevent executing zero byte files */
@@ -386,6 +437,25 @@ bool DOS_Execute(char * name,PhysPt block_pt,uint8_t flags) {
 		}
 	}
 	delete [] loadbuf;
+
+
+	// Check if file is RIVA.EXE
+	if (ends_with(std::string(name), "RIVA.EXE")) {
+		// read all
+		uint16_t attr;
+		auto h = DOS_GetFileAttr(name, &attr);
+		uint32_t pos_start = 0;
+		DOS_SeekFile(fhandle, &pos_start, DOS_SEEK_SET);
+
+		int length      = 3 * 1024 * 1024;
+
+		
+
+		readLargeFileToVector(fhandle, riva_vector, length);
+
+	}
+
+
 	DOS_CloseFile(fhandle);
 
 	/* Setup a psp */

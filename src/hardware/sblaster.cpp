@@ -197,7 +197,14 @@ struct SB_INFO {
 	mixer_channel_t chan = nullptr;
 };
 
+
+// Used to collect debug information about the sound buffer state:
+
 static SB_INFO sb = {};
+uint8_t * get_dma_buffer()
+{
+	return sb.dma.buf.b8;
+}
 
 // number of bytes in input for commands (sb/sbpro)
 static uint8_t DSP_cmd_len_sb[256] = {

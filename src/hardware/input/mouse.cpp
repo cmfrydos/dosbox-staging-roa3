@@ -151,6 +151,17 @@ static void update_cursor_visibility()
 	first_time = false;
 }
 
+// ?? why so complicated, toDO: check again
+#pragma GCC push_options
+#pragma GCC optimize("O0")
+void getMousePosition(int& x, int& y)
+{
+	x              = state.cursor_x_abs;
+	y              = state.cursor_y_abs;
+	volatile int a = 10;
+}
+#pragma GCC pop_options
+
 static void update_state() // updates whole 'state' structure, except cursor visibility
 {
 	// If mouse subsystem not started yet, do nothing
@@ -479,7 +490,8 @@ void MOUSE_NotifyTakeOver(const bool gui_has_taken_over)
 
 void MOUSE_NotifyWindowActive(const bool is_active)
 {
-	state.is_window_active = is_active;
+	// ToDO: Check why this hack was needed again for setting mouse position from HDViewer
+	state.is_window_active = true; //is_active;
 	MOUSE_UpdateGFX();
 }
 
@@ -497,7 +509,7 @@ void MOUSE_NotifyBooting()
 }
 
 void MOUSE_EventMoved(const float x_rel, const float y_rel,
-                      const int32_t x_abs, const int32_t y_abs)
+                      const int32_t x_abs, const int32_t y_abs, bool force)
 {
 	// Event from GFX
 
@@ -506,7 +518,7 @@ void MOUSE_EventMoved(const float x_rel, const float y_rel,
 	update_cursor_visibility();
 
 	// Drop unneeded events
-	if (should_drop_move()) {
+	if (should_drop_move() && !force) { // ToDo: Check again why this was needed 
 		return;
 	}
 
@@ -561,6 +573,7 @@ void MOUSE_EventButton(const uint8_t idx, const bool pressed)
 	if (pressed) {
 		// Handle mouse capture by button click
 		if (state.should_capture_on_click) {
+			// CLICK
 			state.capture_was_requested = true;
 			MOUSE_UpdateGFX();
 			return;
@@ -581,11 +594,14 @@ void MOUSE_EventButton(const uint8_t idx, const bool pressed)
 
 		// Drop unneeded events
 		if (should_drop_press_or_wheel()) {
+			// Dropped unneded event
 			return;
 		}
 	}
 
 	// Notify mouse interfaces
+	
+	// Calling interfaces
 	for (auto &interface : mouse_interfaces)
 		if (interface->IsUsingHostPointer())
 			interface->NotifyButton(idx, pressed);

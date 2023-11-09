@@ -26,6 +26,8 @@
 #include "paging.h"
 #include "pic.h"
 #include "tracy.h"
+#include "roa3/instruction_tracking.h"
+#include "roa3/riva_hook.h"
 
 #if C_DEBUG
 #include "debug.h"
@@ -40,10 +42,26 @@
 #define SaveMd(off,val)	mem_writed(off,val)
 #else 
 #include "paging.h"
-#define LoadMb(off) mem_readb_inline(off)
+
+#ifdef heroval
+uint8_t mem_readb_check(PhysPt address);
+void mem_writeb_check(PhysPt address, uint8_t value);
+#else
+
+uint8_t mem_readb_orig(PhysPt address);
+#define mem_readb_check  mem_readb_orig
+#define mem_writeb_check mem_writeb
+#endif
+
+
+#define LoadMb(off)     mem_readb_check(off)
+
+
+//#define LoadMb(off) mem_readb_inline(off)
 #define LoadMw(off) mem_readw_inline(off)
 #define LoadMd(off) mem_readd_inline(off)
-#define SaveMb(off,val)	mem_writeb_inline(off,val)
+//#define SaveMb(off,val)	mem_writeb_inline(off,val)
+#define SaveMb(off, val) mem_writeb_check(off, val)
 #define SaveMw(off,val)	mem_writew_inline(off,val)
 #define SaveMd(off,val)	mem_writed_inline(off,val)
 #endif
@@ -140,8 +158,10 @@ static inline uint32_t Fetchd() {
 Bits CPU_Core_Normal_Run() noexcept
 {
 	ZoneScoped;
+	riva_init();
 	while (CPU_Cycles-->0) {
 		LOADIP;
+		riva_hook(SegBase(cs));
 		core.opcode_index=cpu.code.big*0x200;
 		core.prefixes=cpu.code.big;
 		core.ea_table=&EATable[cpu.code.big*256];

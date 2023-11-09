@@ -295,14 +295,24 @@ static int16_t reg_to_signed16(const uint16_t x)
 	return static_cast<int16_t>(x);
 }
 
-static uint16_t get_pos_x()
+uint16_t get_pos_x()
 {
 	return static_cast<uint16_t>(std::lround(pos_x)) & state.granularity_x;
 }
 
-static uint16_t get_pos_y()
+uint16_t get_pos_y()
 {
 	return static_cast<uint16_t>(std::lround(pos_y)) & state.granularity_y;
+}
+
+void set_pos_x(uint16_t new_x)
+{
+	pos_x = new_x;
+}
+
+void set_pos_y(uint16_t new_y)
+{
+	pos_y = new_y;
 }
 
 static uint16_t mickey_counter_to_reg16(const float x)

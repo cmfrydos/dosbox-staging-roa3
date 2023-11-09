@@ -163,42 +163,6 @@
     <ClCompile Include="..\src\hardware\innovation.cpp">
       <Filter>src\hardware</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\hardware\input\intel8042.cpp">
-      <Filter>src\hardware\input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\hardware\input\intel8255.cpp">
-      <Filter>src\hardware\input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\hardware\input\keyboard.cpp">
-      <Filter>src\hardware\input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\hardware\input\keyboard_scancodes.cpp">
-      <Filter>src\hardware\input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\hardware\input\mouse.cpp">
-      <Filter>src\hardware\input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\hardware\input\mouse_common.cpp">
-      <Filter>src\hardware\input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\hardware\input\mouse_config.cpp">
-      <Filter>src\hardware\input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\hardware\input\mouse_interfaces.cpp">
-      <Filter>src\hardware\input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\hardware\input\mouse_manymouse.cpp">
-      <Filter>src\hardware\input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\hardware\input\mouseif_dos_driver.cpp">
-      <Filter>src\hardware\input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\hardware\input\mouseif_ps2_bios.cpp">
-      <Filter>src\hardware\input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\hardware\input\mouseif_virtual_machines.cpp">
-      <Filter>src\hardware\input</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\hardware\iohandler.cpp">
       <Filter>src\hardware</Filter>
     </ClCompile>
@@ -802,6 +766,75 @@
     <ClCompile Include="..\src\libs\zmbv\zmbv_vfw.cpp">
       <Filter>src\libs\zmbv</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\hardware\input\intel8042.cpp" />
+    <ClCompile Include="..\src\hardware\input\intel8255.cpp" />
+    <ClCompile Include="..\src\hardware\input\keyboard.cpp" />
+    <ClCompile Include="..\src\hardware\input\keyboard_scancodes.cpp" />
+    <ClCompile Include="..\src\hardware\input\mouse.cpp" />
+    <ClCompile Include="..\src\hardware\input\mouse_common.cpp" />
+    <ClCompile Include="..\src\hardware\input\mouse_config.cpp" />
+    <ClCompile Include="..\src\hardware\input\mouse_interfaces.cpp" />
+    <ClCompile Include="..\src\hardware\input\mouse_manymouse.cpp" />
+    <ClCompile Include="..\src\hardware\input\mouseif_dos_driver.cpp" />
+    <ClCompile Include="..\src\hardware\input\mouseif_ps2_bios.cpp" />
+    <ClCompile Include="..\src\hardware\input\mouseif_virtual_machines.cpp" />
+    <ClCompile Include="..\src\cpu\roa3\bin_analyzer.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\instruction_tracking.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\patch.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\stack_trace.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\hero_annotated.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\log.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\shared_queue.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\shared_memory.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\byte_utils.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\sha.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\string_utils.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\dos_utils.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\riva_memory.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\instruction_callback.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\interceptions\at_pa.cpp">
+      <Filter>src\cpu\roa3\interceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\interceptions\2d_tex_text.cpp">
+      <Filter>src\cpu\roa3\interceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\riva_hook.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\interceptions\interceptions.cpp">
+      <Filter>src\cpu\roa3\interceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\setting.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\audio_frame.h">
@@ -1035,9 +1068,6 @@
     <ClInclude Include="..\src\cpu\dyn_cache.h">
       <Filter>src\cpu</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\cpu\instructions.h">
-      <Filter>src\cpu</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\cpu\lazyflags.h">
       <Filter>src\cpu</Filter>
     </ClInclude>
@@ -1073,24 +1103,6 @@
     </ClInclude>
     <ClInclude Include="..\src\hardware\gameblaster.h">
       <Filter>src\hardware\mame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\hardware\input\intel8042.h">
-      <Filter>src\hardware\input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\hardware\input\intel8255.h">
-      <Filter>src\hardware\input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\hardware\input\mouse_common.h">
-      <Filter>src\hardware\input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\hardware\input\mouse_config.h">
-      <Filter>src\hardware\input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\hardware\input\mouse_interfaces.h">
-      <Filter>src\hardware\input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\hardware\input\mouse_manymouse.h">
-      <Filter>src\hardware\input</Filter>
     </ClInclude>
     <ClInclude Include="..\src\hardware\mame\emu.h">
       <Filter>src\hardware\mame</Filter>
@@ -1293,9 +1305,6 @@
     <ClInclude Include="..\src\dos\program_serial.h">
       <Filter>src\dos</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\dos\program_tree.h">
-      <Filter>src\dos</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\libs\loguru\loguru.hpp">
       <Filter>src\libs\loguru</Filter>
     </ClInclude>
@@ -1321,6 +1330,73 @@
     <ClInclude Include="..\src\libs\zmbv\zmbv.h">
       <Filter>src\libs\zmbv</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\hardware\input\intel8042.h" />
+    <ClInclude Include="..\src\hardware\input\intel8255.h" />
+    <ClInclude Include="..\src\hardware\input\mouse_common.h" />
+    <ClInclude Include="..\src\hardware\input\mouse_config.h" />
+    <ClInclude Include="..\src\hardware\input\mouse_interfaces.h" />
+    <ClInclude Include="..\src\hardware\input\mouse_manymouse.h" />
+    <ClInclude Include="..\src\cpu\instructions.h">
+      <Filter>src\cpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\bin_analyzer.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\dsa.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\instruction_tracking.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\patch.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\sha.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\shared_data.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\stack_trace.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\hero.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\resource.h" />
+    <ClInclude Include="..\src\cpu\roa3\log.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\shared_queue.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\shared_memory.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\byte_utils.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\string_utils.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\dos_utils.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\riva_memory.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\instruction_callback.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\hero_annotated.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\riva_hook.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\interceptions\interceptions.h">
+      <Filter>src\cpu\roa3\interceptions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\winres.rc">
@@ -1331,6 +1407,14 @@
     <Image Include="..\src\dosbox.ico">
       <Filter>resources</Filter>
     </Image>
+    <Image Include="dosbox.ico" />
+    <Image Include="..\contrib\icons\dosbox-staging.ico" />
+    <Image Include="logeyes.ico" />
+    <Image Include="..\src\logeyes.ico" />
+    <Image Include="..\..\..\..\testico2.ico" />
+    <Image Include="..\installation\img\riva.ico" />
+    <Image Include="riva.ico" />
+    <Image Include="..\src\riva.ico" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="include">
@@ -1452,6 +1536,12 @@
     </Filter>
     <Filter Include="src\libs\zmbv">
       <UniqueIdentifier>{99b19861-c042-4e3e-bf24-ee8a418866f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\cpu\roa3">
+      <UniqueIdentifier>{c62d3d74-65d0-4718-b873-b6ccc7ce69cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\cpu\roa3\interceptions">
+      <UniqueIdentifier>{a457090b-b1e5-4e3b-91cb-62a2715d8082}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

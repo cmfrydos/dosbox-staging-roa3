@@ -63,8 +63,8 @@ enum class MouseMapStatus : uint8_t {
 // Notifications from external subsystems - all should go via these methods
 // ***************************************************************************
 
-void MOUSE_EventMoved(const float x_rel, const float y_rel,
-                      const int32_t x_abs, const int32_t y_abs);
+void MOUSE_EventMoved(const float x_rel, const float y_rel, const int32_t x_abs,
+                      const int32_t y_abs, bool force = false);
 void MOUSE_EventMoved(const float x_rel, const float y_rel,
                       const MouseInterfaceId device_id);
 

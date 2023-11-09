@@ -574,6 +574,12 @@ void CPU_Interrupt(Bitu num,Bitu type,Bitu oldeip) {
 		}
 	};
 #endif
+#if C_DEBUG
+	// why was this here again?
+	if ((num == 0x25 || num == 0x37) && reg_al == 0x07) {
+		DEBUG_Breakpoint();
+	}
+#endif
 	if (!cpu.pmode) {
 		/* Save everything on a 16-bit stack */
 		CPU_Push16(reg_flags & 0xffff);
@@ -2336,6 +2342,8 @@ public:
 		CPU_CycleUp=section->Get_int("cycleup");
 		CPU_CycleDown=section->Get_int("cycledown");
 		std::string core(section->Get_string("core"));
+		//core       = "full"; // force core=full mode, overwriting custom settings
+		core       = "normal"; // force core=normal mode, overwriting custom settings
 		cpudecoder=&CPU_Core_Normal_Run;
 		if (core == "normal") {
 			cpudecoder=&CPU_Core_Normal_Run;

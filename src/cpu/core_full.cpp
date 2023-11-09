@@ -29,6 +29,9 @@
 #include "regs.h"
 #include "tracy.h"
 
+#include "roa3//instruction_tracking.h"
+#include "roa3/riva_hook.h"
+
 typedef PhysPt EAPoint;
 #define SegBase(c)	SegPhys(c)
 
@@ -64,6 +67,7 @@ typedef PhysPt EAPoint;
 Bits CPU_Core_Full_Run() noexcept
 {
 	ZoneScoped;
+	riva_init();
 	FullData inst{};
 	while (CPU_Cycles-->0) {
 #if C_DEBUG
@@ -76,6 +80,7 @@ Bits CPU_Core_Full_Run() noexcept
 #endif
 #endif
 		LoadIP();
+		riva_hook(SegBase(cs));
 		inst.entry=cpu.code.big*0x200;
 		inst.prefix=cpu.code.big;
 restartopcode:

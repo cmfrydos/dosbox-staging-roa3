@@ -56,6 +56,7 @@
 #include "timer.h"
 #include "tracy.h"
 #include "video.h"
+#include "cpu/roa3/log.h"
 
 bool shutdown_requested = false;
 MachineType machine;
@@ -307,8 +308,14 @@ void DOSBOX_SetNormalLoop() {
 
 void DOSBOX_RunMachine()
 {
-	while ((*loop)() == 0 && !shutdown_requested)
-		;
+	try {
+		while ((*loop)() == 0 && !shutdown_requested);
+	} catch (const std::runtime_error& e) {
+		log_message(std::string("Runtime Error: ") + e.what());
+		throw;
+	}
+
+
 }
 
 static void DOSBOX_UnlockSpeed( bool pressed ) {

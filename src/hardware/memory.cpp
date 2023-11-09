@@ -556,9 +556,15 @@ bool mem_unalignedwrited_checked(PhysPt address, uint32_t val) {
 	return false;
 }
 
-uint8_t mem_readb(PhysPt address) {
+//uint8_t mem_readb(PhysPt address) {
+//	return mem_readb_inline(address);
+//}
+
+ uint8_t mem_readb_orig(PhysPt address) {
 	return mem_readb_inline(address);
 }
+
+uint8_t mem_readb(PhysPt address);
 
 uint16_t mem_readw(PhysPt address) {
 	return mem_readw_inline(address);
