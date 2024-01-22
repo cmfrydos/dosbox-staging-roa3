@@ -126,9 +126,11 @@ std::string music::music_player::get_last_modified_date(const std::string& filen
 bool music::music_player::is_playing_track(const music_config_entry* applied_data)
 {
 	const auto ptr     = check_audio_ptr();
-	const bool is_same = !ptr.expired() && std::dynamic_pointer_cast<CDROM_Interface_Image::AudioFile>(
+	const bool is_same = !ptr.expired() && applied_data != nullptr &&
+				std::dynamic_pointer_cast<CDROM_Interface_Image::AudioFile>(
 		                     std::shared_ptr<CDROM_Interface_Image::TrackFile>(
-			                     ptr)) ==
+			                     ptr))
+				==
 	                     applied_data->current_Track;
 	return is_same;
 }
