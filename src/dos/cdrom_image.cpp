@@ -34,6 +34,7 @@
 #include <limits>
 #include <sstream>
 #include <vector>
+#include <random>
 
 #if !defined(WIN32)
 #include <libgen.h>
@@ -46,6 +47,11 @@
 #include "setup.h"
 #include "string_utils.h"
 #include "math_utils.h"
+#include "../cpu/roa3/instruction_tracking.h"
+#include "../cpu/roa3/log.h"
+#include "../cpu/roa3/music_configuration.h"
+#include "../cpu/roa3/music_logger.h"
+#include "../cpu/roa3/string_utils.h"
 
 using namespace std;
 
@@ -697,20 +703,93 @@ bool CDROM_Interface_Image::GetMediaTrayStatus(bool& mediaPresent, bool& mediaCh
 	return true;
 }
 
+
+#include <functional>
+#include "../cpu/roa3/music_player.h"
+std::function<bool(std::shared_ptr<CDROM_Interface_Image::TrackFile>,
+                          std::vector<CDROM_Interface_Image::Track>::iterator, uint32_t, uint32_t)>
+        play_audio_ptr;
+
+
+
+
+std::function<void()> stop_audio_ptr;
+
+std::function<std::weak_ptr<CDROM_Interface_Image::TrackFile>()> check_audio_ptr;
+
+extern music::music_logger music_log;
+extern music::music_player music_player;
+std::vector<CDROM_Interface_Image::Track> * cd_tracks;
+
+
+
 bool CDROM_Interface_Image::PlayAudioSector(uint32_t start, uint32_t len)
 {
-	// Find the track that holds the requested sector
-	track_const_iter track = GetTrack(start);
-	std::shared_ptr<TrackFile> track_file;
-	if (track != tracks.end())
-		track_file = track->file;
+	play_audio_ptr = [this](std::shared_ptr<TrackFile> track_file,
+	                   std::vector<CDROM_Interface_Image::Track>::iterator track,
+	                   uint32_t start2,
+	                   uint32_t len2) -> bool {
+		return PlayAudioSectorFile(track_file, track, start2, len2);
+	};
+	stop_audio_ptr = [this]() { ForceStopAudio(); };
+	check_audio_ptr = [this]() { return player.trackFile; };
+	cd_tracks = &tracks;
 
-    #ifdef NO_MUSIC
-    return false; // to prevent dosbox from playing music
-    #endif // NO_MUSIC
+        if (len == 0) {
+		player.isPlaying = false;
+		player.isPaused  = false;
+		if (player.channel)
+			player.channel->Enable(false);
+		return false;
+        }
+
+	
+	// Find the track that holds the requested sector
+	auto track = GetTrack(start);
+	
+	if (track != tracks.end()) {
+
+		auto track_file = track->file;
+		unsigned int track_no = std::distance(tracks.begin(), track) + 1;
+		music_log.track_play(track_no);
+		if (music_player.is_active()) {
+			log_message("Track " + std::to_string(track_no) +
+			            ": " + music_log.get_track_name() + " (" +
+			            music_log.get_track_duration_string() + u8") sollte gespielt werden, wird jedoch (momentär) abgefangen.");
+		} else {
+			log_message("Spiele Track " + std::to_string(track_no) +
+			            ": " + music_log.get_track_name() + " (" +
+			            music_log.get_track_duration_string() + ")");
+			return PlayAudioSectorFile(track_file, track, start, len);
+		}
+
+	} else {
+		StopAudio();
+		player.isPlaying = false;
+		player.isPaused  = false;
+		if (player.channel)
+			player.channel->Enable(false);
+
+	}
+	return false;
+}
+
+
+uint32_t* player_pos;
+
+bool CDROM_Interface_Image::PlayAudioSectorFile(std::shared_ptr<TrackFile> track_file,
+                                                vector<CDROM_Interface_Image::Track>::iterator track,
+                                                uint32_t start,
+                                                uint32_t len)
+{
+	#ifdef NO_MUSIC
+	return false; // to prevent dosbox from playing music
+	#endif // NO_MUSIC
+
+	player_pos = &player.playedTrackFrames;
 
 	// Guard: sanity check the request beyond what GetTrack already checks
-	if (len == 0 || track == tracks.end() || !track_file ||
+	if (len == 0 ||  !track_file ||
 	    track->attr == 0x40 || !player.channel) {
 		StopAudio();
 #ifdef DEBUG
@@ -805,15 +884,32 @@ bool CDROM_Interface_Image::PlayAudioSector(uint32_t start, uint32_t len)
 	return true;
 }
 
-// Tracking last played audio and whether it's paused (by using signed numbers)
-int last_audio_track = 0;
-
 bool CDROM_Interface_Image::PauseAudio(bool resume)
 {
-	last_audio_track  = -last_audio_track;
-	player.isPaused = !resume;
-	if (player.channel)
-		player.channel->Enable(resume);
+	music_log.track_pause(resume);
+
+    if (music_player.is_active()) {
+		if (!resume) {
+			log_message("Musik sollte pausiert werden, wird jedoch abgefangen.");
+		} else {
+			log_message("Musik sollte fortgesetzt werden, wird jedoch abgefangen.");
+		}
+		
+    } else {
+		if (!resume) {
+			log_message("Pausiere Musik");
+		} else {
+			log_message(
+			        "Setze Track " +
+			        std::to_string(music_log.get_last_played_track_no()) +
+			        " fort:" + music_log.get_track_name() + "(" +
+			        music_log.get_track_duration_string() + ")");
+		}
+
+		player.isPaused = !resume;
+		if (player.channel)
+			player.channel->Enable(resume);
+    }
 #ifdef DEBUG
 	LOG_MSG("CDROM: PauseAudio => audio is now %s",
 	        resume ? "unpaused" : "paused");
@@ -823,15 +919,26 @@ bool CDROM_Interface_Image::PauseAudio(bool resume)
 
 bool CDROM_Interface_Image::StopAudio(void)
 {
-	last_audio_track   = 0;
-	player.isPlaying = false;
-	player.isPaused = false;
-	if (player.channel)
-		player.channel->Enable(false);
+	music_log.track_stop();
+	if (music_player.is_active()) {
+		log_message("Musik sollte gestoppt werden, wird jedoch abgefangen.");
+	} else {
+		ForceStopAudio();
+	}
+
 #ifdef DEBUG
 	LOG_MSG("CDROM: StopAudio => stopped playback and halted the mixer");
 #endif
 	return true;
+}
+
+void CDROM_Interface_Image::ForceStopAudio(void)
+{
+	log_message("Stoppe Musik");
+	player.isPlaying = false;
+	player.isPaused  = false;
+	if (player.channel)
+		player.channel->Enable(false);
 }
 
 void CDROM_Interface_Image::ChannelControl(TCtrl ctrl)
@@ -933,9 +1040,7 @@ track_iter CDROM_Interface_Image::GetTrack(const uint32_t sector)
 		}
 		if (!any_tracks) {
 			any_tracks     = true;
-			last_audio_track = 1;
 		} 
-		last_audio_track++;
 		++track;
 		lower_bound = upper_bound;
 	}
@@ -1070,6 +1175,9 @@ void CDROM_Interface_Image::CDAudioCallBack(uint16_t desired_track_frames)
 		player.playedTrackFrames, player.totalTrackFrames);
 #endif
 		player.cd->StopAudio();
+                // Replay Track
+		music_player.set_track_end(true);
+		music_player.track_change();
 	}
 }
 

@@ -20,8 +20,16 @@
 #include "dos_utils.h"
 #include "instruction_tracking.h"
 #include "log.h"
+#include "music_logger.h"
+#include "music_player.h"
 #include "regs.h"
 #include "riva_memory.h"
+#include "../../dos/cdrom.h"
+
+
+music::music_logger music_log;
+music::music_player music_player;
+
 
 // this mess currently maps the set of riva_code_locations to an action that will be performed when eip hits that location
 std::map<riva_code_location, void (*)()> instruction_callback = {
@@ -124,29 +132,55 @@ std::map<riva_code_location, void (*)()> instruction_callback = {
 	 []() {
 		 last_opened_3d = false;
 		 stop_playing_video(0);
+	         //CDROM_Interface_Image::updateMusic();
+	         if (menu_state.log_menu(menu_enum::scoreboard)) {
+		         // Notify music box
+		         music_player.track_change();
+		         
+	         }
 	 }},
 	{open_fight,
 	 []() {
 		 last_opened_3d = false;
 		 stop_playing_video(1);
+	         if (menu_state.log_menu(menu_enum::fight)) {
+		         // Notify music box
+		         music_player.track_change();
+	         }
 	 }},
 	{open_inventory,
 	 []() {
 		 last_opened_3d = false;
 		 stop_playing_video(2);
+	         if (menu_state.log_menu(menu_enum::inventory)) {
+		         // Notify music box
+		         music_player.track_change();
+	         }
 	 }},
 	{open_settings,
 	 []() {
+	         if (menu_state.log_menu(menu_enum::settings)) {
+		         // Notify music box
+		         music_player.track_change();
+	         }
 		 last_opened_3d = false;
 		 stop_playing_video(3);
 	 }},
 	{open_map,
 	 []() {
+	         if (menu_state.log_menu(menu_enum::map)) {
+		         // Notify music box
+		         music_player.track_change();
+	         }
 		 last_opened_3d = false;
 		 stop_playing_video(4);
 	 }},
 	{open_video_playback,
 	 []() {
+	         if (menu_state.log_menu(menu_enum::video)) {
+		         // Notify music box
+		         music_player.track_change();
+	         }
 		 last_opened_3d = false;
 		 // PlayingVideo = true;
 	 }},
@@ -162,10 +196,19 @@ std::map<riva_code_location, void (*)()> instruction_callback = {
 	 }},
 	{open_house, []() {
 		last_opened_3d = false;
+	         if(menu_state.log_menu(menu_enum::house)) {
+		         // Notify music box
+		         music_player.track_change();
+	         }
 	}},
 	{open_3d,
 	 []() {
+		 if (const bool c = menu_state.pop_map_change(); menu_state.log_menu(menu_enum::in_3d) || c){
+		         // Notify music box
+		         music_player.track_change();
+	         }
 		 last_opened_3d = true;
+	         
 		 stop_playing_video(6);
 	 }},
 	{sound_played, []() {
@@ -173,6 +216,10 @@ std::map<riva_code_location, void (*)()> instruction_callback = {
 	}},
 	{play_speex,
 	 []() {
+	         if (menu_state.log_menu(menu_enum::video)) {
+		         // Notify music box
+		         music_player.track_change();
+	         }
 		 last_opened_speex = read_c_string(reg_ecx + 0x62);
 		 playing_video.idx++;
 		 playing_video.is_active = 2;
@@ -181,6 +228,10 @@ std::map<riva_code_location, void (*)()> instruction_callback = {
 
 	{play_intro,
 	 []() {
+	         if (menu_state.log_menu(menu_enum::video)) {
+		         // Notify music box
+		         music_player.track_change();
+	         }
 		 last_opened_speex = read_c_string(reg_eax);
 		 playing_video.idx++;
 		 playing_video.is_active = 3;
@@ -189,6 +240,10 @@ std::map<riva_code_location, void (*)()> instruction_callback = {
 
 	{play_smk,
 	 []() {
+	         if (menu_state.log_menu(menu_enum::video)) {
+		         // Notify music box
+		         music_player.track_change();
+	         }
 		 last_opened_speex = read_c_string(reg_ebx);
 		 playing_video.idx++;
 		 playing_video.is_active = 3;
@@ -198,12 +253,20 @@ std::map<riva_code_location, void (*)()> instruction_callback = {
 
 	{video_played,
 	 []() {
+	         if (menu_state.log_menu(menu_enum::video)) {
+		         // Notify music box
+		         music_player.track_change();
+	         }
 		 set_playing_video();
 		 log_message("Playing Video in Module " + last_opened_module);
 	 }},
 
 	{picture_shown,
 	 []() {
+	         if (menu_state.log_menu(menu_enum::picture)) {
+		         // Notify music box
+		         music_player.track_change();
+	         }
 		 last_opened_speex = read_c_string(reg_eax);
 		 playing_video.idx++;
 		 playing_video.is_active = 4;
@@ -407,6 +470,7 @@ std::map<riva_code_location, void (*)()> instruction_callback = {
 	 }},
 	{get_current_at, print_get_current_at},
 	{get_current_pa, print_get_current_pa},
+        {start_fight, print_fight_info},
         // disable for current logger release, enable later per option
 	//{draw_txt, print_draw_txt},
 	//{copy_tex, print_copy_tex},

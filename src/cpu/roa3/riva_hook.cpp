@@ -241,7 +241,7 @@ int check_ip_binary_search(
 	}
 
 	if (next_index > 0 && ip <= get_ip(numbers[next_index - 1])) {
-		int idx = binary_search_instructions(
+		const int idx = binary_search_instructions(
 			numbers,
 			ip,
 			0,
@@ -255,10 +255,10 @@ int check_ip_binary_search(
 	}
 
 	if (ip - get_ip(numbers[next_index]) > binary_search_threshold) {
-		int idx = binary_search_instructions(numbers,
-			ip,
-			next_index + 1,
-			numbers.size() - 1);
+		const int idx = binary_search_instructions(numbers,
+		                                           ip,
+		                                           next_index + 1,
+		                                           numbers.size() - 1);
 
 		if (idx != -1) {
 			next_index = idx + 1;
@@ -292,11 +292,11 @@ inline int check_ip(const unsigned int ip)
 	return -1;
 }
 
-inline void hook(PhysPt seg_base_cs);
+inline bool hook(PhysPt seg_base_cs);
 
-void riva_hook(const PhysPt seg_base_cs)
+bool riva_hook(const PhysPt seg_base_cs)
 {
-	hook(seg_base_cs);
+	return hook(seg_base_cs);
 	//try {
 	//	hook(seg_base_cs);
 	//} catch (const std::runtime_error& e) {
@@ -305,7 +305,9 @@ void riva_hook(const PhysPt seg_base_cs)
 	//}
 }
 
-inline void hook(const PhysPt seg_base_cs)
+#define Riva3D
+
+inline bool hook(const PhysPt seg_base_cs)
 {
 	// static int next_index                  = 0;
 #ifdef Riva3D
@@ -313,7 +315,7 @@ inline void hook(const PhysPt seg_base_cs)
 	static int cycle_count_for_shared_data = 0;
         // ToDO: Refactor this system completely to only write and read data when needed and use new SharedQueue
 	// ToDo: Check Data Writes
-	if (code_printed && cycle_count_for_shared_data == 0) {
+	if (riva_code_analyzed && cycle_count_for_shared_data == 0) {
 		checked_write_shared_screen_buffer();
 		// log_message("Read Commands A");
 		read_commands();
@@ -329,6 +331,7 @@ inline void hook(const PhysPt seg_base_cs)
 	}
 #endif
 
+	
 	if (int inst_id = check_ip(cpu_regs.ip.dword[DW_INDEX]);
 		inst_id != -1) {
 		if (const auto inst = static_cast<riva_code_location>(
@@ -339,6 +342,10 @@ inline void hook(const PhysPt seg_base_cs)
 			}
 		}
 	}
+	//if (seg_base_cs == 0 && check_buffer()) {
+	//		return true;
+	//}
+	return false;
 }
 
 // this is there to wait until the game is loaded to memory

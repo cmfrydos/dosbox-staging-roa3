@@ -163,6 +163,10 @@ void apply_all_patches(std::map<riva_code_location, int> enum_to_address)
 	patch_position(enum_to_address[patch_nrs_spiegel],
 	               "85D20F849702000089D0E8");
 
+        // patch haggling +-
+	log_message("Aktiviere Patch: Feilsch-Fix");
+	patch_position(enum_to_address[patch_negative_haggling], "F7FB89C789E031D289FB90"); // F7FB89C789E031D20FBFDF
+
 	if (c_patch_3d) {
 		log_message("Aktiviere Patch: Kein 3D");
 		patch_position(enum_to_address[patch_no_3d], "90909090909090");

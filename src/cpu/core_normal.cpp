@@ -161,7 +161,10 @@ Bits CPU_Core_Normal_Run() noexcept
 	riva_init();
 	while (CPU_Cycles-->0) {
 		LOADIP;
-		riva_hook(SegBase(cs));
+		if(riva_hook(SegBase(cs))) {
+			FillFlags();
+			return debugCallback;
+		}
 		core.opcode_index=cpu.code.big*0x200;
 		core.prefixes=cpu.code.big;
 		core.ea_table=&EATable[cpu.code.big*256];

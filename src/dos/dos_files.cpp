@@ -34,6 +34,7 @@
 #include "cross.h"
 #include "string_utils.h"
 #include "support.h"
+#include "../cpu/roa3/menu_state_logger.h"
 
 #define DOS_FILESTART 4
 
@@ -602,7 +603,7 @@ bool DOS_CreateFile(const char* name, uint16_t attributes, uint16_t* entry, bool
 }
 
 // Tracking the last opened level by checking the most recently accessed .3DM file
-std::string last_opened_3dm = "";
+menu_state_logger menu_state;
 
 bool DOS_OpenFile(const char* name, uint8_t flags, uint16_t* entry, bool fcb)
 {
@@ -611,7 +612,7 @@ bool DOS_OpenFile(const char* name, uint8_t flags, uint16_t* entry, bool fcb)
 	else LOG(LOG_FILES,LOG_NORMAL)("file open command %X file %s",flags,name);
 	
 	if (ends_with(name, ".3DM")) {
-		last_opened_3dm = name;
+		menu_state.log_map(name);
 	}
 
 	if (ends_with(name, ".ALF"))

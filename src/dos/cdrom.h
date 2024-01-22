@@ -198,7 +198,7 @@ public:
 
 class CDROM_Interface_Image final : public CDROM_Interface
 {
-private:
+public:
 	// Nested Class Definitions
 	class TrackFile {
 	protected:
@@ -223,7 +223,7 @@ private:
 		virtual void setAudioPosition(uint32_t pos) = 0;
 		const uint16_t chunkSize = 0;
 	};
-
+private:
 	class BinaryFile final : public TrackFile {
 	public:
 		BinaryFile      (const char *filename, bool &error);
@@ -248,6 +248,7 @@ private:
 		std::ifstream   *file;
 	};
 
+public:
 	class AudioFile final : public TrackFile {
 	public:
 		AudioFile       (const char *filename, bool &error);
@@ -272,8 +273,7 @@ private:
 	private:
 		Sound_Sample *sample = nullptr;
 	};
-
-public:
+	
 	// Nested struct definition
 	struct Track {
 		std::shared_ptr<TrackFile> file       = nullptr;
@@ -297,9 +297,14 @@ public:
 	bool	GetAudioSub             (unsigned char& attr, unsigned char& track, unsigned char& index, TMSF& relPos, TMSF& absPos);
 	bool	GetAudioStatus          (bool& playing, bool& pause);
 	bool	GetMediaTrayStatus      (bool& mediaPresent, bool& mediaChanged, bool& trayOpen);
-	bool	PlayAudioSector         (const uint32_t start, uint32_t len);
+	void updateMusic();
+	bool PlayAudioSector(const uint32_t start, uint32_t len);
+	bool PlayAudioSectorFile(std::shared_ptr<TrackFile> track_file,
+	                     std::vector<CDROM_Interface_Image::Track>::iterator track,
+	                     uint32_t start, uint32_t len);
 	bool	PauseAudio              (bool resume);
 	bool	StopAudio               ();
+	void ForceStopAudio();
 	void	ChannelControl          (TCtrl ctrl);
 	bool	ReadSectors             (PhysPt buffer, const bool raw, const uint32_t sector, const uint16_t num);
 	bool	ReadSectorsHost         (void* buffer, bool raw, unsigned long sector, unsigned long num);

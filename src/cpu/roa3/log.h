@@ -24,3 +24,5 @@
 std::string clean_strings(const std::string& german);
 void log_message(const std::string& message);
 void log_message_plain(const std::string& message);
+
+void log_error(const std::string& message);

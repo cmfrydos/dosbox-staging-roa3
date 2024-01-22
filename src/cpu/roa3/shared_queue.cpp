@@ -270,8 +270,8 @@ void push_debug_message(riva::shared_queue& queue, const std::string& message)
 	auto message_type = riva::shared_queue_message_type::log_debug_message;
 	// Convert messageType and message to bytes and push to queue
 	const auto message_type_as_int = static_cast<uint32_t>(message_type);
-	const int total_size = sizeof(message_type_as_int) + message.size();
-	auto buffer          = new char[total_size];
+	const int total_size           = sizeof(message_type_as_int) + message.size();
+	const auto buffer              = new char[total_size];
 	// memcpy(buffer, &messageTypeAsInt, sizeof(messageTypeAsInt));
 	memcpy(buffer, message.c_str(), message.size());
 

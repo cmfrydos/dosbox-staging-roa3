@@ -27,7 +27,7 @@ extern std::vector<int> x_off, y_off, z_off, x_applied_off, z_applied_off,
                         z_foot_off, z_head_height, movement_type_off, x_set_off, y_set_off,
                         z_set_off, r1_off, r2_off, ru_off, size_x_panel_off, size_y_panel_off,
                         time_off, am_pm_off, object_count_off, objects_off, start_3dm_off,
-                        last_module, first_h;
+                        last_module, first_h, max_enemies;
 
 extern int version_off;
 extern std::string version_identifier;

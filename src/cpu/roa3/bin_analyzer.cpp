@@ -280,10 +280,10 @@ bool binary_pattern_analyzer::verify(pattern_locations& i, int hash_id,
                                      const boost::regex& re) const
 {
 	// Convert hex string to integer position
-	unsigned int prev_position = hex_to_integer_big_endian(i.addresses[hash_id]);
+	const unsigned int prev_position = hex_to_integer_big_endian(i.addresses[hash_id]);
 
 	// Set searchStart to saved position
-	auto search_start = str_exe_content.cbegin() + prev_position;
+	const auto search_start = str_exe_content.cbegin() + prev_position;
 
 	// Check if pattern is found starting at the saved position
 	if (boost::smatch verification_match; regex_search(search_start,
@@ -304,8 +304,12 @@ bool binary_pattern_analyzer::verify(pattern_locations& i, int hash_id,
 
 void binary_pattern_analyzer::find_pattern(pattern_locations& i, int hash_id) const
 {
-	std::string regex_string = hex_string_to_byte_regex(i.unique);
-	boost::regex re(regex_string, boost::regex_constants::optimize);
+	const std::string regex_string = hex_string_to_byte_regex(i.unique);
+	const boost::regex re(regex_string, boost::regex_constants::optimize);
+	while (i.addresses.size() <= hash_id) {
+		i.add_hash("");
+	}
+
 	if (!i.addresses[hash_id].empty()) {
 		if (verify(i, hash_id, re)) return;
 	}

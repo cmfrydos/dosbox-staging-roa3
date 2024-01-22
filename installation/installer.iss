@@ -1,12 +1,12 @@
 #define MyAppName "Riva Dosbox Logger"
-#define MyAppVersion "0.1.9"
+#define MyAppVersion "0.1.11"
 
 #define MyAppRegPath "Software\tinion\riva-dosbox-logger"
 
 [Setup]
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
-VersionInfoVersion=0.1.9.0
+VersionInfoVersion=0.1.11.0
 DefaultDirName={pf}\{#MyAppName}
 OutputDir=out
 SetupIconFile="files\install\common\logeyes.ico"
@@ -82,6 +82,7 @@ Type: files; Name: "{app}\main_config.conf"
 Type: files; Name: "{app}\game_autoexec.conf"
 Type: files; Name: "{app}\patch_autoexec.conf"
 Type: filesandordirs; Name: "{app}\DSA3"
+Type: filesandordirs; Name: "{app}\dosbox-roa3"
 Type: files; Name: "{userappdata}\{#MyAppName}\log.txt"
 Type: files; Name: "{userappdata}\{#MyAppName}\log_old.txt"
 Type: files; Name: "{userappdata}\{#MyAppName}\rivaBin.cfg"

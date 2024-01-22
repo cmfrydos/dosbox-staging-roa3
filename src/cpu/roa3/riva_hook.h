@@ -31,4 +31,4 @@ extern std::map<int, riva_code_location> load_instruction_map(const std::string&
 void analyze_riva_code();
 bool is_riva_loaded();
 void riva_init();
-void riva_hook(PhysPt seg_base_cs);
+bool riva_hook(PhysPt seg_base_cs);

@@ -26,13 +26,13 @@
 #include "keyboard.h"
 #include "log.h"
 #include "mouse.h"
+#include "music_logger.h"
 #include "patch.h"
 #include "regs.h"
 #include "render.h"
 #include "riva_memory.h"
 #include "shared_memory.h"
 #include "string_utils.h"
-#include "sdl2_queue/pdcsdl.h"
 
 #include <algorithm>
 #include <fstream>
@@ -161,6 +161,20 @@ std::string get_location_debug_string(const int esp_off)
 	return debug;
 }
 
+std::string get_location_debug_string_vector(const std::vector<int> esp_off)
+{
+	std::string debug = "I/" + version_identifier;
+	for(const int e: esp_off) {
+		// Read Back Pointer
+		const uint32_t val = get_return_address(e);
+
+		debug +=  + "/" + get_instruction_id_str(val);
+	}
+
+	debug += "/" + get_instruction_id_str(reg_eip) + " ";
+	return debug;
+}
+
 
 void write_shared_screen_buffer()
 {
@@ -217,6 +231,8 @@ void clear_visible_3d()
 	}
 }
 
+extern music::music_logger music_log;
+
 void writing_shared_data()
 {
 	ZoneScoped;
@@ -256,7 +272,10 @@ void writing_shared_data()
 		mem_readd(game_ds_base + size_x_panel_off[version_off]));
 	shared_memory->panel_3d_size_y = static_cast<int32_t>(
 		mem_readd(game_ds_base + size_y_panel_off[version_off]));
-	shared_memory->last_played_track = last_audio_track;
+	shared_memory->last_played_track = music_log.get_last_played_track_no();
+	if (music_log.get_state() == music::state::paused) {
+		shared_memory->last_played_track = - shared_memory->last_played_track;
+	}
 
 	if (shared_memory->visible_3d == 0 && last_opened_3d) {
 		clear_visible_3d(); // clear screen before switching to 3D
@@ -277,7 +296,7 @@ void writing_shared_data()
 		game_ds_base + object_count_off[version_off]);
 	write_objects_data(shared_memory->object_count, 0x8000);
 
-	write_file_name(last_opened_3dm, shared_memory->last_opened_3dm, 16);
+	write_file_name(menu_state.get_map_file_name(), shared_memory->last_opened_3dm, 16);
 	write_file_name(last_opened_module,
 	                shared_memory->last_opened_module,
 	                16);
@@ -327,8 +346,8 @@ void force_move_mouse_to(const int x, const int y)
 void read_commands_in_mutex()
 {
 	ZoneScoped;
-	const int x = dos_video_width * shared_command_memory->m_mouse_x;
-	const int y = dos_video_height * shared_command_memory->m_mouse_y;
+	const int x = static_cast<int>(dos_video_width * shared_command_memory->m_mouse_x);
+	const int y = static_cast<int>(dos_video_height * shared_command_memory->m_mouse_y);
 
 	force_move_mouse_to(x, y);
 
@@ -434,7 +453,7 @@ void read_commands()
 	}
 }
 
-void check_buffer()
+bool check_buffer()
 {
 	ZoneScoped;
 	const auto new_b = get_dma_buffer();
@@ -442,9 +461,10 @@ void check_buffer()
 		if (new_b[i] != last_buffer[i]) {
 			log_message("Buffer changed!");
 			memcpy(last_buffer, new_b, 1024);
-			return;
+			return true;
 		}
 	}
+	return false;
 }
 
 bool check_coordinates()

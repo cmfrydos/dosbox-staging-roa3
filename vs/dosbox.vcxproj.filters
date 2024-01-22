@@ -835,6 +835,18 @@
     <ClCompile Include="..\src\cpu\roa3\setting.cpp">
       <Filter>src\cpu\roa3</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\music_configuration.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\music_logger.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\menu_state_logger.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu\roa3\music_player.cpp">
+      <Filter>src\cpu\roa3</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\audio_frame.h">
@@ -1396,6 +1408,18 @@
     </ClInclude>
     <ClInclude Include="..\src\cpu\roa3\interceptions\interceptions.h">
       <Filter>src\cpu\roa3\interceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\music_configuration.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\music_logger.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\menu_state_logger.h">
+      <Filter>src\cpu\roa3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cpu\roa3\music_player.h">
+      <Filter>src\cpu\roa3</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

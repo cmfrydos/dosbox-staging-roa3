@@ -54,6 +54,12 @@ void log_message(const std::string& message)
 	loguru::log(0, __FILE__, __LINE__, clean_strings(message).c_str());
 }
 
+
+void log_error(const std::string& message)
+{
+	loguru::log(loguru::Verbosity_FATAL, __FILE__, __LINE__, clean_strings(message).c_str());
+}
+
 void log_message_plain(const std::string& message)
 {
 	loguru::log(0, __FILE__, __LINE__, message.c_str());

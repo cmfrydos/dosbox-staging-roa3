@@ -19,18 +19,36 @@
  *Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  ***********************************************************************/
 
-
-#include <optional>
+#include <map>
 #include <string>
-#include <vector>
-std::string join(const std::vector<std::string>& vec, const std::string& delimiter);
-std::vector<std::string> split_string(const std::string& str, char del);
-std::string int_to_signed_string(int32_t val, const std::string& in_between = "");
-std::string get_file_name(const std::string& path);
-void write_file_name(const std::string& in, char* out, int max_size);
-std::string get_desktop();
-std::optional<unsigned char> find_highest_character_in_range(const std::string& text,
-                                                         const int low,
-                                                         const int high);
-std::string to_lower(std::string str);
-bool starts_with(const std::string& full_string, const std::string& starting);
+
+namespace music {
+enum class state { paused, playing, stopped };
+
+struct track_info {
+	std::string name;
+	int length_seconds;
+};
+
+class music_logger {
+	int last_played_track_no_;
+	state current_state_;
+	std::map<int, track_info> track_info_map_;
+
+public:
+	music_logger();
+
+	void track_play(int track_no);
+
+	void track_pause(bool resume);
+
+	void track_stop();
+
+	[[nodiscard]] state get_state() const;
+
+	[[nodiscard]] int get_last_played_track_no() const;
+	[[nodiscard]] int get_track_total_seconds(int track_no = -1) const;
+	[[nodiscard]] std::string get_track_duration_string(int track_no = -1) const;
+	[[nodiscard]] std::string get_track_name(int track_no = -1) const;
+};
+}

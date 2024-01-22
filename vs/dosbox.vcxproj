@@ -236,7 +236,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;SDL2_imaged.lib;SDL2_netd.lib;winmm.lib;libpng16d.lib;SDL2maind.lib;SDL2d.lib;odbc32.lib;odbccp32.lib;ws2_32.lib;mt32emu.lib;opusfile.lib;opus.lib;ogg.lib;fluidsynth.lib;speexdsp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)\dosbox.exe</OutputFile>
+      <OutputFile>$(OutDir)\dosbox-roa3.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -280,7 +280,7 @@ IF %ERRORLEVEL% LSS 8 SET ERRORLEVEL = 0</Command>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;SDL2_imaged.lib;SDL2_netd.lib;winmm.lib;libpng16d.lib;SDL2maind.lib;SDL2d.lib;odbc32.lib;odbccp32.lib;ws2_32.lib;mt32emu.lib;opusfile.lib;opus.lib;ogg.lib;speexdsp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)\dosbox.exe</OutputFile>
+      <OutputFile>$(OutDir)\dosbox-roa3.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
@@ -327,7 +327,7 @@ IF %ERRORLEVEL% LSS 8 SET ERRORLEVEL = 0</Command>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;winmm.lib;libpng16.lib;SDL2_image.lib;SDL2_net.lib;SDL2.lib;SDL2main.lib;odbc32.lib;odbccp32.lib;ws2_32.lib;mt32emu.lib;opusfile.lib;opus.lib;ogg.lib;fluidsynth.lib;speexdsp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)\dosbox.exe</OutputFile>
+      <OutputFile>$(OutDir)\dosbox-roa3.exe</OutputFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <ProgramDatabaseFile />
       <SubSystem>Console</SubSystem>
@@ -382,7 +382,7 @@ IF %ERRORLEVEL% LSS 8 SET ERRORLEVEL = 0</Command>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;winmm.lib;libpng16.lib;SDL2_image.lib;SDL2_net.lib;SDL2.lib;SDL2main.lib;odbc32.lib;odbccp32.lib;ws2_32.lib;mt32emu.lib;opusfile.lib;opus.lib;ogg.lib;fluidsynth.lib;speexdsp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)\dosbox.exe</OutputFile>
+      <OutputFile>$(OutDir)\dosbox-roa3.exe</OutputFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <ProgramDatabaseFile>
       </ProgramDatabaseFile>
@@ -439,7 +439,7 @@ IF %ERRORLEVEL% LSS 8 SET ERRORLEVEL = 0</Command>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;winmm.lib;libpng16.lib;SDL2_image.lib;SDL2_net.lib;SDL2.lib;SDL2main.lib;odbc32.lib;odbccp32.lib;ws2_32.lib;mt32emu.lib;opusfile.lib;opus.lib;ogg.lib;fluidsynth.lib;speexdsp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)\dosbox.exe</OutputFile>
+      <OutputFile>$(OutDir)\dosbox-roa3.exe</OutputFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <ProgramDatabaseFile>
       </ProgramDatabaseFile>
@@ -496,7 +496,7 @@ IF %ERRORLEVEL% LSS 8 SET ERRORLEVEL = 0</Command>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;winmm.lib;libpng16.lib;SDL2_image.lib;SDL2_net.lib;SDL2.lib;SDL2main.lib;odbc32.lib;odbccp32.lib;ws2_32.lib;mt32emu.lib;opusfile.lib;opus.lib;ogg.lib;speexdsp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)\dosbox.exe</OutputFile>
+      <OutputFile>$(OutDir)\dosbox-roa3.exe</OutputFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <ProgramDatabaseFile>
       </ProgramDatabaseFile>
@@ -552,7 +552,7 @@ IF %ERRORLEVEL% LSS 8 SET ERRORLEVEL = 0</Command>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;winmm.lib;libpng16.lib;SDL2_image.lib;SDL2_net.lib;SDL2.lib;SDL2main.lib;odbc32.lib;odbccp32.lib;ws2_32.lib;mt32emu.lib;opusfile.lib;opus.lib;ogg.lib;speexdsp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)\dosbox.exe</OutputFile>
+      <OutputFile>$(OutDir)\dosbox-roa3.exe</OutputFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <ProgramDatabaseFile>
       </ProgramDatabaseFile>
@@ -608,7 +608,7 @@ IF %ERRORLEVEL% LSS 8 SET ERRORLEVEL = 0</Command>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;winmm.lib;libpng16.lib;SDL2_image.lib;SDL2_net.lib;SDL2.lib;SDL2main.lib;odbc32.lib;odbccp32.lib;ws2_32.lib;mt32emu.lib;opusfile.lib;opus.lib;ogg.lib;speexdsp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)\dosbox.exe</OutputFile>
+      <OutputFile>$(OutDir)\dosbox-roa3.exe</OutputFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <ProgramDatabaseFile>
       </ProgramDatabaseFile>
@@ -645,6 +645,10 @@ IF %ERRORLEVEL% LSS 8 SET ERRORLEVEL = 0</Command>
     <ClCompile Include="..\src\cpu\roa3\interceptions\at_pa.cpp" />
     <ClCompile Include="..\src\cpu\roa3\interceptions\interceptions.cpp" />
     <ClCompile Include="..\src\cpu\roa3\log.cpp" />
+    <ClCompile Include="..\src\cpu\roa3\menu_state_logger.cpp" />
+    <ClCompile Include="..\src\cpu\roa3\music_configuration.cpp" />
+    <ClCompile Include="..\src\cpu\roa3\music_logger.cpp" />
+    <ClCompile Include="..\src\cpu\roa3\music_player.cpp" />
     <ClCompile Include="..\src\cpu\roa3\patch.cpp" />
     <ClCompile Include="..\src\cpu\roa3\riva_hook.cpp" />
     <ClCompile Include="..\src\cpu\roa3\riva_memory.cpp" />
@@ -1021,6 +1025,10 @@ IF %ERRORLEVEL% LSS 8 SET ERRORLEVEL = 0</Command>
     <ClInclude Include="..\src\cpu\roa3\instruction_tracking.h" />
     <ClInclude Include="..\src\cpu\roa3\interceptions\interceptions.h" />
     <ClInclude Include="..\src\cpu\roa3\log.h" />
+    <ClInclude Include="..\src\cpu\roa3\menu_state_logger.h" />
+    <ClInclude Include="..\src\cpu\roa3\music_configuration.h" />
+    <ClInclude Include="..\src\cpu\roa3\music_logger.h" />
+    <ClInclude Include="..\src\cpu\roa3\music_player.h" />
     <ClInclude Include="..\src\cpu\roa3\patch.h" />
     <ClInclude Include="..\src\cpu\roa3\riva_hook.h" />
     <ClInclude Include="..\src\cpu\roa3\riva_memory.h" />

@@ -20,6 +20,7 @@
  ***********************************************************************/
 
 
+#include "menu_state_logger.h"
 #include "shared_data.h"
 #include "stack_trace.h"
 #include "vga.h"
@@ -36,8 +37,7 @@
 constexpr bool clog_message_pops = false;
 constexpr bool c_patch_3d        = false;
 
-extern int last_audio_track;
-extern std::string last_opened_3dm;
+extern menu_state_logger menu_state;
 
 extern uint16_t current_video_index;
 extern char* screen_mem;
@@ -91,6 +91,7 @@ extern int last_xb;
 
 int get_instruction_id(int ip_location, int default_value);
 std::string get_location_debug_string(int esp_off);
+std::string get_location_debug_string_vector(std::vector<int> esp_off);
 
 void save_screen();
 void clear_screen();
@@ -100,7 +101,7 @@ void write_shared_screen_buffer();
 void write_objects_data(int count, int max_count);
 void clear_visible_3d();
 
-void check_buffer();
+bool check_buffer();
 bool check_first_song_entry();
 extern uint8_t* get_dma_buffer();
 

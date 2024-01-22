@@ -50,7 +50,8 @@ std::vector<int> x_off             = {0x377450, 0x377450 + 0x3740},
                  objects_off      = {0x37DAD0, 0x37DAD0},
                  start_3dm_off    = {0x37DA90, 0x37DA90},
                  last_module      = {0x3AB54C, 0x3AB54C},
-                 first_h          = {0x3CE37C, 0x3D18A4};
+                 first_h          = {0x3CE37C, 0x3D18A4},
+                 max_enemies      = {0x36E582, 0x371922};
 
 int8_t get_hero_byte(const int hero, const int off)
 {
@@ -84,7 +85,7 @@ void check_version(const int idx, const std::string& str)
 	std::string version;
 
 	// Find the version information using the hash
-	auto it = version_map.find(val_s);
+	const auto it = version_map.find(val_s);
 	if (it != version_map.end()) {
 		std::tie(version, version_identifier, version_off) = it->second;
 	} else {

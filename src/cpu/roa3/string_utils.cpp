@@ -27,6 +27,8 @@
 #include <Shlobj.h>
 #include <optional>
 #include <windows.h>
+#include <algorithm>
+#include <cctype>
 
 std::string join(const std::vector<std::string>& vec, const std::string& delimiter)
 {
@@ -114,4 +116,21 @@ std::optional<unsigned char> find_highest_character_in_range(const std::string& 
 		}
 	}
 	return highest_char;
+}
+
+std::string to_lower(std::string str)
+{
+	std::transform(str.begin(), str.end(), str.begin(), [](const unsigned char c) {
+		return std::tolower(c);
+	});
+
+	return str;
+}
+
+bool starts_with(const std::string& full_string, const std::string& starting)
+{
+	if (full_string.size() < starting.size()) {
+		return false; // The full string is shorter than the prefix
+	}
+	return full_string.compare(0, starting.size(), starting) == 0;
 }

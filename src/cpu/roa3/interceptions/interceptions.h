@@ -25,6 +25,7 @@
 
 #include <map>
 
+
 enum riva_code_location {
 	random1 = 0,
 	random2,
@@ -107,7 +108,9 @@ enum riva_code_location {
 	patch_nrs_spiegel,
 	draw_txt,
 	copy_tex,
-	tex_mem_set
+	tex_mem_set,
+	patch_negative_haggling,
+	start_fight
 };
 
 extern std::vector<std::tuple<int, riva_code_location>> instruction_list;
@@ -144,6 +147,7 @@ void add_new_sound();
 void stop_playing_video(int type = -1);
 
 void set_playing_video();
+void print_fight_info();
 
 
 void print_get_current_at();

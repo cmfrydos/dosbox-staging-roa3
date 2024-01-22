@@ -90,7 +90,7 @@ struct message_data {
 
 	video_info playing_video;
 
-	uint32_t last_played_track;
+	int32_t last_played_track;
 	int32_t last_sound;
 	sound_info sounds[16];
 
