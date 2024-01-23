@@ -470,7 +470,8 @@ std::map<riva_code_location, void (*)()> instruction_callback = {
 	 }},
 	{get_current_at, print_get_current_at},
 	{get_current_pa, print_get_current_pa},
-        {start_fight, print_fight_info},
+        //{start_fight, print_fight_info},
+        {start_fight2, print_fight_info2}
         // disable for current logger release, enable later per option
 	//{draw_txt, print_draw_txt},
 	//{copy_tex, print_copy_tex},

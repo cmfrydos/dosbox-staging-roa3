@@ -468,3 +468,25 @@ void print_fight_info()
 	log_message(location  + "Starte Kampf K" + std::to_string(fight_num) +
 	            " mit " + max_enemies_str);
 }
+
+void print_fight_info2()
+{
+	// ToDo: ESP-{16,0} only correct for certain calling function
+	// Only {0} is always correct. A working Stacktrace would really help.
+	const std::string location = get_location_debug_string_vector({244, 0});
+	const int pos              = game_ds_base + max_enemies[version_off];
+	const uint16_t max_enemies_enabled = mem_readw(pos);
+	std::string max_enemies_str        = "allen Gegnern";
+	if (max_enemies_enabled != 0) {
+		if (max_enemies_enabled != 1) {
+			max_enemies_str = "bis zu " +
+			                  std::to_string(max_enemies_enabled) +
+			                  " Gegnern";
+		} else {
+			max_enemies_str = "einem Gegner";
+		}
+	}
+	const uint32_t fight_num = reg_eax + 1;
+	log_message(location + "Starte Kampf K" + std::to_string(fight_num) +
+	            " mit " + max_enemies_str);
+}

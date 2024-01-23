@@ -110,7 +110,8 @@ enum riva_code_location {
 	copy_tex,
 	tex_mem_set,
 	patch_negative_haggling,
-	start_fight
+	start_fight,
+        start_fight2
 };
 
 extern std::vector<std::tuple<int, riva_code_location>> instruction_list;
@@ -148,6 +149,7 @@ void stop_playing_video(int type = -1);
 
 void set_playing_video();
 void print_fight_info();
+void print_fight_info2();
 
 
 void print_get_current_at();
