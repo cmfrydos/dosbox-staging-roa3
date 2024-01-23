@@ -1,12 +1,12 @@
 #define MyAppName "Riva Dosbox Logger"
-#define MyAppVersion "0.1.11"
+#define MyAppVersion "0.1.12"
 
 #define MyAppRegPath "Software\tinion\riva-dosbox-logger"
 
 [Setup]
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
-VersionInfoVersion=0.1.11.0
+VersionInfoVersion=0.1.12.0
 DefaultDirName={pf}\{#MyAppName}
 OutputDir=out
 SetupIconFile="files\install\common\logeyes.ico"
@@ -138,6 +138,7 @@ var
   CancelButton: TNewButton;
   InfoLabel: TNewStaticText;
   DoUpdate : boolean;
+  UpdatePath : string; 
   CopyGameDir : boolean;
 
 
@@ -244,7 +245,7 @@ end;
 
 function InstallStartmenuGroup() : Boolean;
 begin
-  Result := (not InstallToAppData) and (not GameVersion = OtherExtract);
+  Result := (not InstallToAppData) and (not GameVersion = OtherExtract) and (not DoUpdate);
 end;
 
 function CustomMsgBox(repairbuttontext, message: string): Integer;
@@ -515,6 +516,8 @@ begin
     begin
       Result := True; // Continue with the installation
       DoUpdate := True;
+      // MsgBox(InstallPath, mbInformation, MB_OK);
+      UpdatePath := InstallPath;
     end
     else if Choice = mrNo then
     begin
@@ -660,6 +663,7 @@ end;
 procedure InitializeWizard();
 var
   StringList: TStringList;
+  I : Integer;
 begin
   InstallWelcomePage := CreateOutputMsgPage(wpInfoBefore,
   ExpandConstant('{cm:InstallWelcomePageTitle}'),
@@ -753,6 +757,19 @@ begin
   Page7GameFileLinkCopy.Add(ExpandConstant('{cm:GameFileLinkingLink}'));
   Page7GameFileLinkCopy.Add(ExpandConstant('{cm:GameFileLinkingCopy}'));
   Page7GameFileLinkCopy.Values[0] := True;
+
+  if DoUpdate then
+  begin
+    WizardForm.DirEdit.Text := UpdatePath;
+  end;
+end;
+
+function BoolToString(b: Boolean) : String;
+begin
+  if b then
+    Result := 'True'
+  else
+    Result := 'False';
 end;
 
 
@@ -760,7 +777,25 @@ function ShouldSkipPage(PageID: Integer): Boolean;
 var 
   InstallGameVersion : TGameVersion;
   InstallGameInOriginal : TInstallationInOriginalGame;
+  I : Integer;
+  msg : String;
 begin
+  // Disable all extra Tasks when updating
+  // Could not find another working place for this. 
+  // It seems this needs to be executed during a 'skipped' page.
+  if DoUpdate then
+  begin
+    //msg := IntToStr(PageID) + #13#10;
+    // Loop through all tasks and uncheck them
+    for I := 0 to WizardForm.TasksList.Items.Count - 1 do
+    begin
+      //msg := msg + WizardForm.TasksList.ItemCaption[I] + ': ' + BoolToString(WizardForm.TasksList.Checked[I]) + #13#10;
+      WizardForm.TasksList.Checked[I] := False;
+    end;
+    //MsgBox(msg, mbError, MB_OK);
+  end;
+
+
   Result := False;
 
   InstallGameVersion := TGameVersion(Page1GameVersion.SelectedValueIndex);
@@ -775,7 +810,7 @@ begin
 
   if DoUpdate then
   begin
-    Result := PageID in [Page1GameVersion.ID, Page4SelectGameImage.ID, Page5OriginalGameFolder.ID, Page6BroadDestination.ID, Page7GameFileLinkCopy.ID];
+    Result := PageID in [InstallWelcomePage.ID, Page1GameVersion.ID, Page2SelectGameFolder.ID, Page3SelectGameCD.ID, Page4SelectGameImage.ID, Page5OriginalGameFolder.ID, Page6BroadDestination.ID, Page7GameFileLinkCopy.ID, wpSelectTasks];
     exit;
   end;
 
@@ -820,6 +855,7 @@ var
   InstallGameVersion : TGameVersion;
   CheckFunction : TCheckFunction;
   BroadDest : TInstallationFolder;
+  I : Integer;
 begin
   Result := True;
   InstallGameVersion := TGameVersion(Page1GameVersion.SelectedValueIndex);
@@ -915,7 +951,7 @@ end;
 procedure CurPageChanged(CurPageID: Integer);
 var
   CustomLog: string;
-
+  I : Integer;
 begin
   if CurPageID = Page3SelectGameCD.ID then
   begin
@@ -925,6 +961,17 @@ begin
   if CurPageID = wpReady then
   begin
     CustomLog := ''; // Initialize the custom log
+
+    if DoUpdate = True then
+    begin
+      if UpdatePath <> ExpandConstant('{app}') then
+        MsgBox('Setup Assertion Error: Wrong Installation Path', mbError, MB_OK);
+
+      AppendToLog(ExpandConstant('{cm:InstallationMethod}'), 'Update\Repair: ' + ExpandConstant('{app}') , CustomLog);
+      WizardForm.ReadyMemo.Lines.Add(CustomLog);
+      WizardForm.ReadyMemo.Visible := True;
+      exit;
+    end;
 
     // Log for Page1GameVersion (Game Installation Version)
     if GameVersion = None then
@@ -1627,6 +1674,10 @@ var
 begin
   if CurStep = ssPostInstall then
   begin
+    if DoUpdate then
+    begin
+      exit;
+    end;
 
     if TGameVersion(Page1GameVersion.SelectedValueIndex) = OtherInstallImage then
     begin
