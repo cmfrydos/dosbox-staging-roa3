@@ -1,3 +1,7 @@
+# DOSBox Staging RoA3
+
+DOSBox Staging fork enabling Modding and Reverse Engineering of the Game Realms of Arkania 3, Shadows over Riva. 
+
 # DOSBox Staging
 
 ![GPL-2.0-or-later][gpl-badge]
@@ -6,18 +10,6 @@
 This repository attempts to modernize the DOSBox codebase by using current
 development practices and tools, fixing issues, and adding features that better
 support today's systems.
-
-## Build status
-
-[![Linux x86\_64 build status][build-lin1-badge]][build-lin1-ci]
-[![Linux other build status][build-lin2-badge]][build-lin2-ci]
-[![Windows (VisualStudio) build status][build-win-msvc-badge]][build-win-msvc-ci]
-[![Windows (MSYS2) build status][build-win-msys2-badge]][build-win-msys2-ci]
-[![macOS build status][build-mac-badge]][build-mac-ci]
-
-## Code quality status
-
-[![Coverity status][coverity-badge]][3]
 
 ## Summary of features
 
